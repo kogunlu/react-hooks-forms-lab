@@ -1,37 +1,53 @@
 import React, {useState} from "react";
 import { v4 as uuid } from "uuid";
 
-function ItemForm({newItem, setNewItem, onItemFormSubmit}) {
+function ItemForm({ onItemFormSubmit }) {
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("Produce");
 
- 
+  function handleNameChange(event) {
+    setName(event.target.value);
+  }
 
+  function handleCategoryChange(event) {
+    setCategory(event.target.value);
+  }
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    onItemFormSubmit({
+      id: uuid(),
+      name,
+      category,
+    });
+  }
+  
   return (
-    <form className="NewItem">
+    <form className="NewItem" onSubmit={handleSubmit}>
       <label>
         Name:
-        <input type="text" name="name" 
-        value={newItem.name} 
-        onChange={(e) => setNewItem({...newItem, name: e.target.value})} />
+        <input
+          type="text"
+          name="name"
+          value={name}
+          onChange={handleNameChange}
+        />
       </label>
 
       <label>
         Category:
-        <select name="category" onChange={(e) => setNewItem({...newItem, category: e.target.value})}>
+        <select
+          name="category"
+          value={category}
+          onChange={handleCategoryChange}
+        >
           <option value="Produce">Produce</option>
           <option value="Dairy">Dairy</option>
           <option value="Dessert">Dessert</option>
         </select>
       </label>
 
-      <button 
-      type="submit" 
-      onClick={ (e) =>{
-        e.preventDefault()
-        onItemFormSubmit(newItem)
-      }}>
-        Add to List
-      </button>
+      <button type="submit">Add to List</button>
     </form>
   );
 }

@@ -4,17 +4,16 @@ import Filter from "./Filter";
 import Item from "./Item";
 import { v4 as uuid } from 'uuid';
 
-function ShoppingList({ items }) {
+function ShoppingList({ items, onItemFormSubmit }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedName, setSelectedName] = useState("")
-  const [newItem, setNewItem] = useState({id: uuid(), name: "", category: "Produce"})
-  const [itemList, setItemList] = useState(items)
+  
 
   function handleCategoryChange(event) {
     setSelectedCategory(event.target.value);
   }
 
-  const itemsAfterSearch = itemList.filter((item) => {
+  const itemsAfterSearch = items.filter((item) => {
     if(selectedName === "") return true
 
     return item.name.toLowerCase().includes(selectedName) 
@@ -26,18 +25,10 @@ function ShoppingList({ items }) {
     return item.category === selectedCategory;
   });
 
-  function onItemFormSubmit(newItemWillBeAdded){
-    itemsToDisplay.push(newItemWillBeAdded)
-    console.log(newItem)
-    console.log(itemsToDisplay)
-
-    setItemList([...itemList, newItemWillBeAdded])
-    
-  } 
 
   return (
     <div className="ShoppingList">
-      <ItemForm newItem = {newItem} setNewItem = {setNewItem} onItemFormSubmit = {onItemFormSubmit} />
+      <ItemForm onItemFormSubmit = {onItemFormSubmit} />
       <Filter onCategoryChange={handleCategoryChange} onSearchChange = {setSelectedName} />
       <ul className="Items">
         {itemsToDisplay.map((item) => (
